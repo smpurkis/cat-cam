@@ -1,0 +1,59 @@
+<html>
+
+<body>
+    <img id="cam" src="">
+    <button onclick="(e) => {}"></button>
+    <script>
+        let last_frame_time = ''; // no time before first frame to skip longer delay at start
+        function create_UUID() {
+            var dt = new Date().getTime();
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (dt + Math.random() * 16) % 16 | 0;
+                dt = Math.floor(dt / 16);
+                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+            return uuid;
+        }
+
+        let uuid = create_UUID()
+        console.log(uuid)
+
+        // Only load video on click of the page
+        // document.body.addEventListener("click", function (evt) {
+        //     document.getElementById("cam").src = `/video_feed/?uuid=${uuid}`
+        // });
+        document.getElementById("cam").src = `/video_feed/?uuid=${uuid}`
+
+        setInterval(() => {
+            let end_connection_url = `/refresh_connection/?uuid=${uuid}`
+            console.log(end_connection_url)
+            fetch(end_connection_url)
+        }, 1_000)
+
+        // window.addEventListener('beforeunload', function (e) {
+        //     let end_connection_url = `${url_for('end_connection')}?uuid=${uuid}`
+        //     console.log(end_connection_url)
+        //     fetch(end_connection_url)
+        //     alert(end_connection_url)
+
+        //     e.preventDefault();
+        //     e.returnValue = '';
+        // });
+
+        // document.getElementById("cam").addEventListener("load", function () { // event "load" is generated after every loaded frame
+        //     last_frame_time = new Date();
+        // });
+
+        // var intervalId = window.setInterval(function () {
+        //     if (last_frame_time != '') { // to
+        //         var current_time = new Date();
+        //         var seconds = (current_time - last_frame_time) / 1000;
+        //         if (seconds >= 1) {
+        //             clearInterval(intervalId);  // stop checking it
+        //         }
+        //     }
+        // }, 100);  // 100ms = 0.1s 
+    </script>
+</body>
+
+</html>
