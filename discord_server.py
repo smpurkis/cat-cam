@@ -10,7 +10,8 @@ import os
 import discord
 from dotenv import load_dotenv
 import subprocess as sp
-from threading import Thread
+from discord import SyncWebhook
+
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -43,7 +44,10 @@ server_process = None
 @client.event
 async def on_ready():
     print(f"{client.user} has connected to Discord!")
-
+    webhook = SyncWebhook.from_url(
+        "https://discord.com/api/webhooks/1060990017440317499/mJwz-D-YsfcFPmZZuNuh-yybQQlDklAE3EmYjOSv_aeO3lnAJNbmfNcKT6qylKN9cCsR"
+    )
+    webhook.send("CatCam Bot is up!")
 
 @client.event
 async def on_message(message):
