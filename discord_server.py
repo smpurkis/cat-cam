@@ -34,6 +34,7 @@ help_message = """
 /end or /stop - ends the cat cam, outputs "CatCam has been stopped!" when the cam has been stopped.
 /start_debug - /start with stream logs
 /end_debug or /stop_debug - /end with stream logs
+/reboot - reboot raspberry pi
 """
 
 server_loaded_line = "your url is:"
@@ -82,6 +83,10 @@ async def on_message(message):
         process = sp.Popen(end_gunicorn_cmd.split(), stdout=sp.PIPE, stderr=sp.STDOUT)
         await asyncio.sleep(1)
         await message.channel.send("CatCam has been stopped!")
+
+    if message.content.startswith("/reboot"):
+        await message.channel.send("Triggering Raspberry Pi Reboot!")
+        sp.run("sudo reboot".split())
 
     if message.content.startswith("/help"):
         await message.channel.send(help_message)
