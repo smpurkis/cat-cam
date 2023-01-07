@@ -22,14 +22,7 @@ intents.message_content = True
 
 no_exception = False
 
-# while not no_exception:
-#     try:
 client = discord.Client(intents=intents)
-    #     no_exception = True
-    #     break
-    # except Exception as e:
-    #     pass
-    # time.sleep(1)
 
 start_cmd = "bash -x /home/pi/projects/cat_cam/run.sh"
 end_gunicorn_cmd = "fuser -k 5000/tcp"
@@ -72,7 +65,7 @@ async def on_message(message):
             if server_loaded_line in stdout_line:
                 await message.channel.send(f"STDOUT: {stdout_line}")
                 break
-        await asyncio.sleep(1)
+        await asyncio.sleep(3)
         await message.channel.send("CatCam ready!")
 
     if (
@@ -92,11 +85,4 @@ async def on_message(message):
 
 no_exception = False
 
-# while not no_exception:
-#     try:
 client.run(TOKEN)
-    #     no_exception = True
-    #     break
-    # except Exception as e:
-    #     pass
-    # time.sleep(1)
