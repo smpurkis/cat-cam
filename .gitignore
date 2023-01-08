@@ -4,3 +4,4 @@ frontend/.svelte-kit
 *.pyc
 .env
 cat_cam.log
+build/
