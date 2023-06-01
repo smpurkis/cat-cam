@@ -16,7 +16,8 @@ from multiprocessing import Process
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
-
+if TOKEN is None:
+    raise Exception("DISCORD_TOKEN environment variable is not set")
 
 intents = discord.Intents.default()
 intents.message_content = True
