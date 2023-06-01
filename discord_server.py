@@ -1,12 +1,9 @@
-# bot.py
 from pathlib import Path
 import time
 
-# print("waiting 60 seconds until network start")
-# time.sleep(60)
-
 import asyncio
 import os
+from typing import Optional
 
 import discord
 from dotenv import load_dotenv
@@ -28,16 +25,15 @@ no_exception = False
 
 client = discord.Client(intents=intents)
 
-start_cmd = "bash -x /home/pi/projects/cat_cam/run.sh"
+start_cmd = "bash -x ./run.sh"
 end_gunicorn_cmd = "fuser -k 5000/tcp"
-end_localtunnel_cmd = "fuser -k 5000/tcp"
-launch_twitch_cmd = "bash -x /home/pi/projects/cat_cam/twitch/run.sh"
+launch_twitch_cmd = "bash -x ./run.sh"
 
 help_message = """
 /start - start the cat cam, outputs "CatCam ready!" when the cam has fully loaded.
 /end or /stop - ends the cat cam, outputs "CatCam has been stopped!" when the cam has been stopped.
-/twitch_start - run twitch stream
-/twitch_stop - stop twitch stream
+/tstart - run twitch stream
+/tstop - stop twitch stream
 /start_debug - /start with stream logs
 /end_debug or /stop_debug - /end with stream logs
 /reboot - reboot raspberry pi
@@ -46,13 +42,16 @@ help_message = """
 server_loaded_line = "your url is:"
 
 server_process = None
-twitch_process = None
+twitch_process: Optional[sp.Popen] = None
+
 
 def stop_stream():
-    Path("/home/pi/projects/cat_cam/twitch/stop_stream").write_text("s")
+    Path("./twitch/stop_stream").write_text("s")
+
 
 def reset_stream():
-    Path("/home/pi/projects/cat_cam/twitch/stop_stream").unlink(missing_ok=True)
+    Path("./twitch/stop_stream").unlink(missing_ok=True)
+
 
 @client.event
 async def on_ready():
@@ -70,7 +69,7 @@ async def on_message(message):
 
     global server_process
     global twitch_process
-    if message.content.startswith("/twitch_start"):
+    if message.content.startswith("/tstart"):
         # process = Process(target=run_twitch)
         # process = Process(target=sp.Popen, args=(launch_twitch_cmd,))
         process = sp.Popen(launch_twitch_cmd.split())
@@ -80,7 +79,7 @@ async def on_message(message):
         await message.channel.send(f"View at: https://www.twitch.tv/zyguard7777777")
         await message.channel.send("CatCam ready!")
 
-    if message.content.startswith("/twitch_stop"):
+    if message.content.startswith("/tstop"):
         twitch_process.terminate()
         stop_stream()
         await asyncio.sleep(1)
