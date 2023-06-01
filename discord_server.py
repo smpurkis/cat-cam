@@ -70,7 +70,7 @@ async def on_message(message):
 
     global server_process
     global twitch_process
-    if message.content.startswith("/tstart"):
+    if message.content.startswith("/teststart"):
         # process = Process(target=run_twitch)
         # process = Process(target=sp.Popen, args=(launch_twitch_cmd,))
         process = sp.Popen(launch_twitch_cmd.split())
@@ -80,7 +80,7 @@ async def on_message(message):
         await message.channel.send(f"View at: https://www.twitch.tv/zyguard7777777")
         await message.channel.send("CatCam ready!")
 
-    if message.content.startswith("/tstop"):
+    if message.content.startswith("/teststop"):
         twitch_process.terminate()
         stop_stream()
         await asyncio.sleep(1)
