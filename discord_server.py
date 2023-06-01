@@ -31,13 +31,10 @@ end_gunicorn_cmd = "fuser -k 5000/tcp"
 launch_twitch_cmd = "bash -x ./run.sh"
 
 help_message = """
-/start - start the cat cam, outputs "CatCam ready!" when the cam has fully loaded.
-/end or /stop - ends the cat cam, outputs "CatCam has been stopped!" when the cam has been stopped.
 /tstart - run twitch stream
 /tstop - stop twitch stream
-/start_debug - /start with stream logs
-/end_debug or /stop_debug - /end with stream logs
 /reboot - reboot raspberry pi
+/help - show this message
 """
 
 server_loaded_line = "your url is:"
@@ -70,7 +67,7 @@ async def on_message(message):
 
     global server_process
     global twitch_process
-    if message.content.startswith("/teststart"):
+    if message.content.startswith("/tstart"):
         # process = Process(target=run_twitch)
         # process = Process(target=sp.Popen, args=(launch_twitch_cmd,))
         process = sp.Popen(launch_twitch_cmd.split())
@@ -80,39 +77,12 @@ async def on_message(message):
         await message.channel.send(f"View at: https://www.twitch.tv/zyguard7777777")
         await message.channel.send("CatCam ready!")
 
-    if message.content.startswith("/teststop"):
+    if message.content.startswith("/tstop"):
         twitch_process.terminate()
         stop_stream()
         await asyncio.sleep(1)
         await message.channel.send("CatCam has been stopped!")
         reset_stream()
-
-    if message.content.startswith("/start") or message.content.startswith(
-        "/start_debug"
-    ):
-        process = sp.Popen(start_cmd.split(), stdout=sp.PIPE, stderr=sp.STDOUT)
-        server_process = process
-        for stdout_line in iter(process.stdout.readline, ""):
-            stdout_line = stdout_line.decode()
-            print(stdout_line.replace("\n", ""))
-            if message.content.startswith("/start_debug"):
-                await message.channel.send(f"STDOUT: {stdout_line}")
-            if server_loaded_line in stdout_line:
-                await message.channel.send(f"STDOUT: {stdout_line}")
-                break
-        await asyncio.sleep(3)
-        await message.channel.send("CatCam ready!")
-
-    if (
-        message.content.startswith("/end")
-        or message.content.startswith("/end_debug")
-        or message.content.startswith("/stop")
-        or message.content.startswith("/stop_debug")
-    ):
-        server_process.terminate()
-        process = sp.Popen(end_gunicorn_cmd.split(), stdout=sp.PIPE, stderr=sp.STDOUT)
-        await asyncio.sleep(1)
-        await message.channel.send("CatCam has been stopped!")
 
     if message.content.startswith("/reboot"):
         await message.channel.send("Triggering Raspberry Pi Reboot!")
