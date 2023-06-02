@@ -84,7 +84,7 @@ async def on_message(message):
         await asyncio.sleep(1)
         await message.channel.send("CatCam has been stopped!")
         reset_stream()
-        if os.environ.get("TESTING") is not None:
+        if os.environ.get("TESTING") == "True":
             print("Test concluded successfully! Exiting...")
             exit(0)
 
