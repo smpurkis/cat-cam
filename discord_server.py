@@ -44,11 +44,12 @@ twitch_process: Optional[sp.Popen] = None
 
 
 def stop_stream():
-    Path("./twitch/stop_stream").write_text("s")
+    with Path("twitch/stop_stream").open("w") as f:
+        f.write("s")
 
 
 def reset_stream():
-    Path("./twitch/stop_stream").unlink(missing_ok=True)
+    Path("twitch/stop_stream").unlink(missing_ok=True)
 
 
 @client.event
@@ -83,6 +84,9 @@ async def on_message(message):
         await asyncio.sleep(1)
         await message.channel.send("CatCam has been stopped!")
         reset_stream()
+        if os.environ.get("TESTING") is not None:
+            print("Test concluded successfully! Exiting...")
+            exit(0)
 
     if message.content.startswith("/reboot"):
         await message.channel.send("Triggering Raspberry Pi Reboot!")
