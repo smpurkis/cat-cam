@@ -1,7 +1,10 @@
-FROM python:3.10-slim-buster
+# FROM python:3.10-slim-buster
+# alpine
+FROM python:3.10-alpine
 
 # install git and ffmpeg
-RUN apt-get update && apt-get install -y git ffmpeg
+# RUN apt-get update && apt-get install --no-install-recommends -y git ffmpeg
+RUN apk add --no-cache git ffmpeg
 
 WORKDIR /app
 RUN git clone https://github.com/smpurkis/cat-cam.git
