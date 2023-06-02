@@ -42,12 +42,12 @@ def display_time_text_on_frame(frame):
 
 
 def check_stop_stream():
-    if Path("twitch/stop_stream").exists():
+    if Path("stop_stream").exists():
         exit(0)
 
 
 def reset_stream():
-    Path("twitch/stop_stream").unlink(missing_ok=True)
+    Path("stop_stream").unlink(missing_ok=True)
 
 
 def run_twitch():

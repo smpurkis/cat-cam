@@ -44,12 +44,12 @@ twitch_process: Optional[sp.Popen] = None
 
 
 def stop_stream():
-    with Path("twitch/stop_stream").open("w") as f:
+    with Path("stop_stream").open("w") as f:
         f.write("s")
 
 
 def reset_stream():
-    Path("twitch/stop_stream").unlink(missing_ok=True)
+    Path("stop_stream").unlink(missing_ok=True)
 
 
 @client.event
