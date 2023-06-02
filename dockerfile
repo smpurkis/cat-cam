@@ -21,5 +21,5 @@ CMD ["python", "discord_server.py"]
 # cmd using .env file
 
 ## Slim
-# using docker-slim to reduce image size
-# docker run -it --rm --privileged --pid=host justincormack/slim build --http-probe=false cat-cam
+# using (docker) slim to reduce image size
+# slim build -t cat-cam .
